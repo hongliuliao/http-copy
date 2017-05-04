@@ -14,8 +14,10 @@
 
 class HttpClient {
 private:
-    CURL *curl;
+    CURL *_curl;
 public:
+    HttpClient();
+
     CURLcode init();
 
     CURLcode get(std::string &url, std::string &result);

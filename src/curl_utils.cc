@@ -18,9 +18,13 @@ int res_writer(char *data, size_t size, size_t nmemb, std::string *write_data) {
 	return size * nmemb;
 }
 
+HttpClient::HttpClient() {
+    _curl = NULL;
+}
+
 CURLcode HttpClient::init() {
-    curl = curl_easy_init();
-    if(!curl) {
+    _curl = curl_easy_init();
+    if (!_curl) {
         LOG_ERROR("curl_easy_init error!");
         return CURLE_FAILED_INIT;
     }
@@ -28,14 +32,14 @@ CURLcode HttpClient::init() {
 }
 
 CURLcode HttpClient::get(std::string &url, std::string &result) {
-    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-    CURLcode res_code = curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, res_writer);
+    curl_easy_setopt(_curl, CURLOPT_URL, url.c_str());
+    CURLcode res_code = curl_easy_setopt(_curl, CURLOPT_WRITEFUNCTION, res_writer);
 
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &result);
-    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 3);
-    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 3);
+    curl_easy_setopt(_curl, CURLOPT_WRITEDATA, &result);
+    curl_easy_setopt(_curl, CURLOPT_CONNECTTIMEOUT, 3);
+    curl_easy_setopt(_curl, CURLOPT_TIMEOUT, 3);
 
-    res_code = curl_easy_perform(curl);
+    res_code = curl_easy_perform(_curl);
 
     if(res_code != CURLE_OK) {
         LOG_ERROR("curl_easy_perform faild : %s, url:%s", curl_easy_strerror(res_code), url.c_str());
@@ -44,6 +48,6 @@ CURLcode HttpClient::get(std::string &url, std::string &result) {
 }
 
 int HttpClient::close() {
-    curl_easy_cleanup(curl);
+    curl_easy_cleanup(_curl);
     return 0;
 }

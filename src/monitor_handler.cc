@@ -56,10 +56,11 @@ int LogMonitorHandler::handle_lines(std::vector<std::string> lines) {
                 configs[LINE_REG_NAME].c_str(), match_ret, matched_size);
             continue;
         }
+        std::string uri = match_str_array[1];
 
         std::string url = "http://";
         url += _dist_host;
-        url += match_str_array[1];
+        url += uri;
         
         LOG_INFO("start copy url:%s, dist_host:%s", url.c_str(), _dist_host.c_str());
 
