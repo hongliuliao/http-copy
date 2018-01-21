@@ -11,10 +11,10 @@ all: deps
 	cp -r conf output/
 
 # build for curl
-deps/curl-7.54.0/Makefile:
-	cd deps/curl-7.54.0 && ./configure && make
+libcurl:
+	cd deps/curl-7.54.0 && make
 
-deps: deps/curl-7.54.0/Makefile
+deps: libcurl 
 
 %.o: %.cc
 	$(CXX) -c $(CXXFLAGS) $< -o $@
